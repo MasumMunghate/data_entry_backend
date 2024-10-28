@@ -1,0 +1,76 @@
+// Import sequelize and data types
+const sequelize = require("../config/db.connection.js");
+const { DataTypes } = require("sequelize");
+
+// Define the registeruser model
+const registeruser = sequelize.define(
+  "registeruser",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    mobile_number: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    start_date: {
+      type: DataTypes.DATE,
+      allowNull: true, 
+    },
+    end_date: {
+      type: DataTypes.DATE,
+      allowNull: true, 
+    },
+    plan: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    caller: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: {
+          args: [
+            [
+              "caller 1",
+              "caller 2",
+              "caller 3",
+              "caller 4",
+              "caller 5",
+              "caller 6",
+              "caller 7",
+              "caller 8",
+              "caller 9",
+            ],
+          ],
+          msg: "caller must be one of the allowed options.",
+        },
+      },
+    },
+    status: {
+      type: DataTypes.ENUM,
+      values: ["pending", "sussess", "frezz", "active"],
+      defaultValue: "pending",
+    },
+  },
+  {
+    freezeTableName: true,
+  }
+);
+// registeruser.sync({force:true});
+module.exports = registeruser;

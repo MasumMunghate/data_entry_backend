@@ -1,0 +1,15 @@
+  //get all register user
+  start_date:{
+    type: DataTypes.DATE,
+    allowNull: false,
+    validate:{
+      notEmpty: true,
+    },
+  },
+  end_date:{
+    type: DataTypes.DATE,
+    allowNull: false,
+    validate:{
+      notEmpty: true,
+    },
+  },
