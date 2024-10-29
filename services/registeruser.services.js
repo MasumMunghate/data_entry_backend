@@ -1,34 +1,28 @@
 const db = require("../models");
 const nodemailer = require("nodemailer");
-const cloudinary = require('cloudinary').v2;
-const upload = require('../config/multer.config');
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+const fs = require("fs");
+const cloudinary  = require("../config/cloudinaryConfig");
+// console.log(cloudinary.config());
 
 const transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
   port: 587,
-  secure: false, 
+  secure: false,
   auth: {
     user: "nigel.mohr57@ethereal.email",
     pass: "BYZGZXh7sgJmwZzr1V",
   },
 });
-async function sendMailToRegisterUser(name , email){
+async function sendMailToRegisterUser(name, email) {
   let info = await transporter.sendMail({
-    from: '"Maddison Foo Koch 👻" <nigel.mohr57@ethereal.email>', 
-    to: email, 
-    subject: "Hello ✔", 
-    text: `hii ${name}`, 
+    from: '"Maddison Foo Koch 👻" <nigel.mohr57@ethereal.email>',
+    to: email,
+    subject: "Hello ✔",
+    text: `hii ${name}`,
     html: "<b>Hello world?</b>",
-  })
+  });
   console.log("Message sent: %s", info.messageId);
 }
-
 
 const createnewUser = async (req) => {
   const { name, email, address, mobile_number, plan, caller } = req.body;
@@ -60,28 +54,53 @@ const retriveAllUser = async (req) => {
 };
 
 const stapminfoRecive = async (req) => {
-  console.log(req.file);
+  const {email, start_date} = req.body;
+  const {passport_photo, signature} = req.files;
+  
   try {
-    if (!req.file) {
-      throw new Error("No file uploaded.");
+    if (!passport_photo || !signature) {
+      throw new Error("Files `passport_photo` or `signature` are missing");
     }
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "Imges",
-      use_filename: true,
-      unique_filename: false,
+    const passportPhotoRes = await cloudinaryfun(passport_photo[0].buffer);
+    const signatureRes = await cloudinaryfun(signature[0].buffer);
+    if (!passportPhotoRes.secure_url || !signatureRes.secure_url) {
+      throw new Error("Upload to Cloudinary failed for one or more files");
+    }
+    if (!signatureRes || !signatureRes.secure_url) {
+      throw new Error("Signature upload to Cloudinary failed");
+    }
+    const newRecord = await db.stampInfo.create({
+      email: email,
+      start_date: start_date,
+      signature: signatureRes.secure_url,
+      passport_photo: passportPhotoRes.secure_url
     });
-    await StampInfo.create({
-      email: req.body.email,
-      start_date: req.body.start_date,
-      signature: req.body.signature,
-      passport_photo: result.secure_url,
-    });
-    return { imageUrl: result.secure_url, imageId: result.public_id };
+
+    return newRecord;
+  
   } catch (error) {
-    console.error("Error:", error);
-    return null;
+    throw new Error(error.message);
   }
+
 };
+async function cloudinaryfun(fileBuffer) {
+  console.log(fileBuffer,"filebuffer");
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'Images' },
+      (error, result) => {
+        if (error) {
+          console.log(error,"detaild error");
+          reject(new Error('Upload to Cloudinary failed'));
+        } else {
+          resolve(result);
+        }
+      }
+    );
+    uploadStream.end(fileBuffer);
+  });
+}
 
 
-module.exports = { createnewUser, retriveAllUser,stapminfoRecive };
+
+module.exports = { createnewUser, retriveAllUser, stapminfoRecive };

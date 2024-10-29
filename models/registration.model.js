@@ -1,8 +1,7 @@
-// Import sequelize and data types
+
 const sequelize = require("../config/db.connection.js");
 const { DataTypes } = require("sequelize");
 
-// Define the registeruser model
 const registeruser = sequelize.define(
   "registeruser",
   {
@@ -70,6 +69,7 @@ const registeruser = sequelize.define(
   },
   {
     freezeTableName: true,
+   
   }
 );
 // registeruser.sync({force:true});
