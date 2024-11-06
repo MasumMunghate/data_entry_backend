@@ -1,6 +1,6 @@
-
 const sequelize = require("../config/db.connection.js");
 const { DataTypes } = require("sequelize");
+const stampInfo = require("./stapm.model.js");
 
 const registeruser = sequelize.define(
   "registeruser",
@@ -63,14 +63,25 @@ const registeruser = sequelize.define(
     },
     status: {
       type: DataTypes.ENUM,
-      values: ["pending", "sussess", "frezz", "active"],
+      values: ["pending", "success", "freeze", "active"],
       defaultValue: "pending",
     },
+    // stampId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   references: {
+    //     model: stampInfo,
+    //     key: "id",
+    //   },
+    // },
   },
   {
     freezeTableName: true,
-   
   }
 );
+
+registeruser.belongsTo(stampInfo, { foreignKey: "stampId" });
+stampInfo.hasOne(registeruser, { foreignKey: "stampId" });
+
 // registeruser.sync({force:true});
 module.exports = registeruser;

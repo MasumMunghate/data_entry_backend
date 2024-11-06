@@ -5,7 +5,8 @@ dotenv.config();
 const database_name = process.env.DATABASE_NAME;
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
-const sequelize = new Sequelize(database_name, username, password,{
+const 
+sequelize = new Sequelize(database_name, username, password,{
     host : process.env.HOST,
     dialect : 'postgres'
 });

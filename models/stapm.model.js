@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db.connection");
-
-const stapmModel = sequelize.define(
+const sequelize = require("../config/db.connection.js");
+const registeruser = require("./registration.model.js");
+const stampInfo = sequelize.define(
   "stampInfo",
   {
     id: {
@@ -42,5 +42,8 @@ const stapmModel = sequelize.define(
     timestamps: false,
   }
 );
+
+// registeruser.hasOne(stampInfo, { foreignKey: "user_id" });
+// stampInfo.belongsTo(registeruser, { foreignKey: "user_id"});
 // stampInfo.sync({force:true});
-module.exports = stapmModel;
+module.exports = stampInfo;
