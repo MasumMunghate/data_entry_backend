@@ -36,6 +36,10 @@ const stampInfo = sequelize.define(
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
+    end_date :{
+      type: DataTypes.DATE,
+      allowNull: true,
+    }
   },
   {
     freezeTableName: true,

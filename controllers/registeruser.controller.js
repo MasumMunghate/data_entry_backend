@@ -5,6 +5,10 @@ const {
   deleteUserByID,
   editUser,
   sendEmail,
+  allUserWithPaggination,
+  allStampData,
+  getStampDataById,
+  userSingleValue
 } = require("../services/registeruser.services");
 const db = require("../models");
 
@@ -95,14 +99,12 @@ const singleUserById = async (req, res) => {
   }
   const userName = findRegisterId.email;
   console.log(userName, "userName=============");
-  return res
-    .status(200)
-    .send({
-      message: "user successful retrive",
-      findRegisterId,
-      randompassword,
-      userName,
-    });
+  return res.status(200).send({
+    message: "user successful retrive",
+    findRegisterId,
+    randompassword,
+    userName,
+  });
 };
 function generatePassword() {
   const createPassword =
@@ -142,7 +144,7 @@ function generatePassword() {
 
 const deleteuser = async (req, res) => {
   try {
-    const user =await deleteUserByID(req);
+    const user = await deleteUserByID(req);
     if (!user) {
       return res.status(400).send({ message: "User not found" });
     }
@@ -155,7 +157,7 @@ const deleteuser = async (req, res) => {
 
 const editregisterUser = async (req, res) => {
   try {
-    const user =await editUser(req);
+    const user = await editUser(req);
     if (!user) {
       return res.status(400).send({ message: "User not found" });
     }
@@ -165,16 +167,61 @@ const editregisterUser = async (req, res) => {
     console.error("Error", error);
   }
 };
-
-
-const secondEmailSend = async (req, res)=>{
+const secondEmailSend = async (req, res) => {
   try {
     const email = await sendEmail(req);
-    
-    return res.status(200).send({message:"Email send successfully",email})
+    return res.status(200).send({ message: "Email send successfully", email });
   } catch (error) {
-    res.status(500).send({message:"Internal server error"});
+    res.status(500).send({ message: "Internal server error" });
     console.error("Error", error);
+  }
+};
+
+const userPaggination = async (req, res) => {
+  try {
+    const alluser = await allUserWithPaggination(req);
+    if (!alluser) {
+      return res.status(400).send({ message: "no user found" });
+    }
+    return res.status(200).send({ message: "all User with paggination",alluser });
+  } catch (error) {
+    console.log("Error", error);
+    
+  }
+};
+
+const stampData = async(req, res)=>{
+  try {
+    const stamp = await allStampData(req);
+    if(!stamp){
+      return res.status(400).send({message:"No stamp data Available"});
+    }
+    return res.status(200).send({message:"All Stamp data",stamp})
+  } catch (error) {
+    throw error
+  }
+}
+const stampDataById = async(req, res)=>{
+  try {
+    const stampId = await getStampDataById(req);
+    if(!stampId){
+      return res.status(400).send({message:"Details not found"})
+    }
+    return res.status(200).send({message:"Data by Perticular id" , stampId});
+  } catch (error) {
+    throw error
+  }
+}
+
+const getAllValue = async(req, res)=>{
+  try {
+    const userdata  = await userSingleValue(req);
+    if(!userdata){
+      return res.status(400).send({message:"no user"})
+    }
+    return res.status(200).send({message:"all user", userdata});
+  } catch (error) {
+    throw error
   }
 }
 module.exports = {
@@ -185,5 +232,9 @@ module.exports = {
   getAllUser,
   deleteuser,
   editregisterUser,
-  secondEmailSend
+  secondEmailSend,
+  userPaggination,
+  stampData,
+  stampDataById,
+  getAllValue
 };

@@ -66,6 +66,10 @@ const registeruser = sequelize.define(
       values: ["pending", "success", "freeze", "active"],
       defaultValue: "pending",
     },
+    password : {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
     // stampId: {
     //   type: DataTypes.INTEGER,
     //   allowNull: true,
@@ -74,6 +78,7 @@ const registeruser = sequelize.define(
     //     key: "id",
     //   },
     // },
+
   },
   {
     freezeTableName: true,
