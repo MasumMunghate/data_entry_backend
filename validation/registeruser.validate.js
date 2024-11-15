@@ -24,8 +24,7 @@ const registerUserValidate = {
         "string.pattern.base": "Mobile number must contain only digits",
         "any.required": "Mobile number is required",
       }),
-
-      address: Joi.string().trim().required().messages({
+    address: Joi.string().trim().required().messages({
       "string.base": "Address must be a string",
       "any.required": "Address is required",
     }),
@@ -34,22 +33,23 @@ const registerUserValidate = {
       "any.required": "Plan is required",
     }),
     caller: Joi.string()
-    .valid(
-      "caller 1",
-      "caller 2",
-      "caller 3",
-      "caller 4",
-      "caller 5",
-      "caller 6",
-      "caller 7",
-      "caller 8",
-      "caller 9"
-    )
-    .required()
-    .messages({
-      "any.only": "Caller must be one of the allowed options.",
-      "any.required": "Caller is required",
-    }),
+      .valid(
+        "caller 1",
+        "caller 2",
+        "caller 3",
+        "caller 4",
+        "caller 5",
+        "caller 6",
+        "caller 7",
+        "caller 8",
+        "caller 9"
+      )
+      .required()
+      .messages({
+        "any.only": "Caller must be one of the allowed options.",
+        "any.required": "Caller is required",
+      }),
+     
   }),
 };
 

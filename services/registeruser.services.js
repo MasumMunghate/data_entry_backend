@@ -21,13 +21,13 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: true,
   },
 });
-async function sendMailToRegisterUser(name, email) {
+async function sendMailToRegisterUser(name, email ,userid) {
   let info = await transporter.sendMail({
     from: "process.env.EMAIL_FROM",
     to: email,
     subject: "Registration Confirmation - Glorry Enterprises",
     text: `hii ${name}`,
-    html: `Dear User, <br> Thank you for choosing GLorry Enterprises. "Link which redirect to stamp paper section" `,
+    html: `Dear User, <br> Thank you for choosing GLorry Enterprises. "Link which redirect to stamp paper section" Link:https://tacottr.ptcare.in?userid=${userid} `,
   });
   console.log("Message sent: %s", info.messageId);
 }
@@ -43,7 +43,8 @@ const createnewUser = async (req) => {
       plan,
       caller,
     });
-    await sendMailToRegisterUser(name, email);
+
+    await sendMailToRegisterUser(name, email , newUser.id);
     return newUser;
   } catch (error) {
     console.error("Error", error);
@@ -60,9 +61,10 @@ const retriveAllUser = async (req) => {
     throw error;
   }
 };
+
 // logic with 5 day working status success
 const stapminfoRecive = async (req) => {
-  const { email, start_date } = req.body;
+  const { email, start_date,userid } = req.body;
   const { passport_photo, signature } = req.files;
 
   try {
@@ -82,6 +84,7 @@ const stapminfoRecive = async (req) => {
     date.setDate(date.getDate() + 5);
     console.log(date, "UpdateDate");
     const newRecord = await db.stampInfo.create({
+      userid:userid,
       email: email,
       start_date: start_date,
       end_date: date,

@@ -8,7 +8,7 @@ const {
   allUserWithPaggination,
   allStampData,
   getStampDataById,
-  userSingleValue
+  userSingleValue,
 } = require("../services/registeruser.services");
 const db = require("../models");
 
@@ -80,31 +80,31 @@ const getAllUser = async (req, res) => {
 };
 
 const singleUserById = async (req, res) => {
-  const user_id = req.params.id;
-  const findRegisterId = await db.registeruser.findOne({
-    where: { id: user_id },
-    include: [
-      {
-        model: stampInfo,
-        as: "stampInfo",
-      },
-    ],
-  });
+  try {
+    const user_id = req.params.id;
+    const findRegisterId = await db.registeruser.findOne({
+      where: { id: userid },
+    });
+    const randompassword = generatePassword();
+    console.log(randompassword, "randompassword==========");
 
-  const randompassword = generatePassword();
-  console.log(randompassword, "randompassword==========");
-
-  if (!findRegisterId) {
-    return res.status(400).send({ message: "user not found" });
+    if (!findRegisterId) {
+      return res.status(400).send({ message: "user not found" });
+    }
+    const userName = findRegisterId.email;
+    console.log(userName, "userName=============");
+    return res.status(200).send({
+      message: "user successful retrive",
+      findRegisterId,
+      randompassword,
+      userName,
+    });
+  } catch (error) {
+    console.error(error, "error");
+    return res
+      .status(500)
+      .send({ message: "Server error", error: error.message });
   }
-  const userName = findRegisterId.email;
-  console.log(userName, "userName=============");
-  return res.status(200).send({
-    message: "user successful retrive",
-    findRegisterId,
-    randompassword,
-    userName,
-  });
 };
 function generatePassword() {
   const createPassword =
@@ -116,6 +116,32 @@ function generatePassword() {
   }
   return password;
 }
+const getStampbyId = async (req, res) => {
+  try {
+    const stamp_id = req.query.id;
+    const data = await db.stampInfo.findOne({
+      where: { id: stamp_id },
+      include: [{model: registeruser, as: "registeruser"}],
+    });
+    
+    if (!data) {
+      return res.status(400).send({ message: "user not found" });
+    }
+    const updateStatus =await db.registeruser.update(
+     {status : "success"},
+     {where : {id : data.registeruser.id}}
+    )
+    return res.status(200).send({
+      message: "user successful retrive",
+      data
+    });
+  } catch (error) {
+    console.error(error, "error");
+    return res
+      .status(500)
+      .send({ message: "Server error", error: error.message });
+  }
+};
 // const createUserWithPosts = async (req, res) => {
 //   try {
 //     const { name, email, posts } = req.body;
@@ -183,47 +209,48 @@ const userPaggination = async (req, res) => {
     if (!alluser) {
       return res.status(400).send({ message: "no user found" });
     }
-    return res.status(200).send({ message: "all User with paggination",alluser });
+    return res
+      .status(200)
+      .send({ message: "all User with paggination", alluser });
   } catch (error) {
     console.log("Error", error);
-    
   }
 };
 
-const stampData = async(req, res)=>{
+const stampData = async (req, res) => {
   try {
     const stamp = await allStampData(req);
-    if(!stamp){
-      return res.status(400).send({message:"No stamp data Available"});
+    if (!stamp) {
+      return res.status(400).send({ message: "No stamp data Available" });
     }
-    return res.status(200).send({message:"All Stamp data",stamp})
+    return res.status(200).send({ message: "All Stamp data", stamp });
   } catch (error) {
-    throw error
+    throw error;
   }
-}
-const stampDataById = async(req, res)=>{
+};
+const stampDataById = async (req, res) => {
   try {
     const stampId = await getStampDataById(req);
-    if(!stampId){
-      return res.status(400).send({message:"Details not found"})
+    if (!stampId) {
+      return res.status(400).send({ message: "Details not found" });
     }
-    return res.status(200).send({message:"Data by Perticular id" , stampId});
+    return res.status(200).send({ message: "Data by Perticular id", stampId });
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
-const getAllValue = async(req, res)=>{
+const getAllValue = async (req, res) => {
   try {
-    const userdata  = await userSingleValue(req);
-    if(!userdata){
-      return res.status(400).send({message:"no user"})
+    const userdata = await userSingleValue(req);
+    if (!userdata) {
+      return res.status(400).send({ message: "no user" });
     }
-    return res.status(200).send({message:"all user", userdata});
+    return res.status(200).send({ message: "all user", userdata });
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 module.exports = {
   registerUser,
   allregisteruser,
@@ -236,5 +263,6 @@ module.exports = {
   userPaggination,
   stampData,
   stampDataById,
-  getAllValue
+  getAllValue,
+  getStampbyId
 };

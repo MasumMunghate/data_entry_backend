@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db.connection.js");
 const registeruser = require("./registration.model.js");
+
 const stampInfo = sequelize.define(
   "stampInfo",
   {
@@ -39,7 +40,15 @@ const stampInfo = sequelize.define(
     end_date :{
       type: DataTypes.DATE,
       allowNull: true,
-    }
+    },
+    userid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "registeruser",  
+        key: "id",
+      },
+    },
   },
   {
     freezeTableName: true,
@@ -47,7 +56,5 @@ const stampInfo = sequelize.define(
   }
 );
 
-// registeruser.hasOne(stampInfo, { foreignKey: "user_id" });
-// stampInfo.belongsTo(registeruser, { foreignKey: "user_id"});
 // stampInfo.sync({force:true});
 module.exports = stampInfo;

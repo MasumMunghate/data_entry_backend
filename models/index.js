@@ -49,6 +49,9 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+registeruser.hasOne(stampInfo, { foreignKey: "userid" });
+stampInfo.belongsTo(registeruser, { foreignKey: "userid" });
+
 
 user.hasMany(post, {
   foreignKey: "userId",

@@ -69,24 +69,13 @@ const registeruser = sequelize.define(
     password : {
       type: DataTypes.STRING,
       allowNull: true,
-    }
-    // stampId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   references: {
-    //     model: stampInfo,
-    //     key: "id",
-    //   },
-    // },
-
+    },
   },
   {
     freezeTableName: true,
   }
-);
+)
 
-registeruser.belongsTo(stampInfo, { foreignKey: "stampId" });
-stampInfo.hasOne(registeruser, { foreignKey: "stampId" });
 
 // registeruser.sync({force:true});
 module.exports = registeruser;
