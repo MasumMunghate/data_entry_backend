@@ -22,5 +22,6 @@ router.post('/sendemail/:id', secondEmailSend)
 router.get('/getalluser' , userPaggination)
 router.get('/stampdata', stampData)
 router.get('/stampdata/:id', stampDataById)
-router.get('/getallvalue', getAllValue)
+router.get('/getallvalue', getAllValue) // return single value
+// router.delete('/getelestamp', deleteStamp)
 module.exports= router;
