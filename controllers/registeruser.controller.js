@@ -9,6 +9,7 @@ const {
   allStampData,
   getStampDataById,
   userSingleValue,
+  assingmentSubmitionServices,
 } = require("../services/registeruser.services");
 const db = require("../models");
 
@@ -251,6 +252,18 @@ const getAllValue = async (req, res) => {
     throw error;
   }
 };
+
+const assingmentSubmition = async(req, res)=>{
+  try {
+    const result = await assingmentSubmitionServices(req)
+    if(result){
+      res.status(400).send({message:"No assingment form"});
+    }
+    res.status(400).send({message:"data fetch successfully", data:result});
+  } catch (error) {
+    
+  }
+}
 module.exports = {
   registerUser,
   allregisteruser,
@@ -264,5 +277,6 @@ module.exports = {
   stampData,
   stampDataById,
   getAllValue,
-  getStampbyId
+  getStampbyId,
+  assingmentSubmition
 };

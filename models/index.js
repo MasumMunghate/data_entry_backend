@@ -14,6 +14,7 @@ const stampInfo = require("./stapm.model.js");
 
 const user = require("./user.model.js");
 const post = require("./post.model.js");
+const submitassignment = require("./submitassingment.model.js");
 
 const db = {};
 let sequelize;
@@ -51,6 +52,9 @@ db.Sequelize = Sequelize;
 
 registeruser.hasOne(stampInfo, { foreignKey: "userid" });
 stampInfo.belongsTo(registeruser, { foreignKey: "userid" });
+
+registeruser.hasMany(submitassignment,{foreignKey:"registeruserId"});
+submitassignment.belongsTo(registeruser,{foreignKey:"registeruserId"});
 
 
 user.hasMany(post, {

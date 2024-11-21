@@ -13,12 +13,12 @@ const bulkUserServices = async(req)=>{
 
 
 const randomDataServices = async(req)=>{
-
+  const {userId} = req.params;
+  console.log(userId);
+  
   try {
-   console.log(req.body,"body");
-   
-    
     const count = await db.userassignments.count();
+    const submit = await db.submitassignment.count();
     const randomOffset = Math.floor(Math.random()*count);
     const randonUser = await db.userassignments.findOne({offset:randomOffset});
     return randonUser

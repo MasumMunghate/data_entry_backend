@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
     rejectUnauthorized: true,
   },
 });
-async function sendMailToRegisterUser(name, email ,userid) {
+async function sendMailToRegisterUser(name, email, userid) {
   let info = await transporter.sendMail({
     from: "process.env.EMAIL_FROM",
     to: email,
@@ -44,7 +44,7 @@ const createnewUser = async (req) => {
       caller,
     });
 
-    await sendMailToRegisterUser(name, email , newUser.id);
+    await sendMailToRegisterUser(name, email, newUser.id);
     return newUser;
   } catch (error) {
     console.error("Error", error);
@@ -64,7 +64,7 @@ const retriveAllUser = async (req) => {
 
 // logic with 5 day working status success
 const stapminfoRecive = async (req) => {
-  const { email, start_date,userid } = req.body;
+  const { email, start_date, userid } = req.body;
   const { passport_photo, signature } = req.files;
 
   try {
@@ -84,7 +84,7 @@ const stapminfoRecive = async (req) => {
     date.setDate(date.getDate() + 5);
     console.log(date, "UpdateDate");
     const newRecord = await db.stampInfo.create({
-      userid:userid,
+      userid: userid,
       email: email,
       start_date: start_date,
       end_date: date,
@@ -336,6 +336,15 @@ const userSingleValue = async (req) => {
     throw error;
   }
 };
+
+const assingmentSubmitionServices = async (req) => {
+  try {
+    
+  } catch (error) {
+    console.log(error,"Error");
+    
+  }
+};
 module.exports = {
   createnewUser,
   retriveAllUser,
@@ -347,4 +356,5 @@ module.exports = {
   allStampData,
   getStampDataById,
   userSingleValue,
+  assingmentSubmitionServices
 };
