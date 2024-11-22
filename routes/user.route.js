@@ -8,6 +8,6 @@ const router = require('express').Router();
 router.post('/addbulkuser', addBulkUser); // done
 router.get('/getsingledata/:userId',getSingleData); // done
 router.get('/singlevalue',dataIntoSingleValue);
-router.get('/userdetailswithassingmentsubmition' , assingmentSubmition)
+router.get('/userdetailswithassingmentsubmition/:id' , assingmentSubmition)
 
 module.exports = router;

@@ -53,7 +53,7 @@ db.Sequelize = Sequelize;
 registeruser.hasOne(stampInfo, { foreignKey: "userid" });
 stampInfo.belongsTo(registeruser, { foreignKey: "userid" });
 
-registeruser.hasMany(submitassignment,{foreignKey:"registeruserId"});
+registeruser.hasOne(submitassignment,{foreignKey:"registeruserId"});
 submitassignment.belongsTo(registeruser,{foreignKey:"registeruserId"});
 
 

@@ -122,19 +122,19 @@ const getStampbyId = async (req, res) => {
     const stamp_id = req.query.id;
     const data = await db.stampInfo.findOne({
       where: { id: stamp_id },
-      include: [{model: registeruser, as: "registeruser"}],
+      include: [{ model: registeruser, as: "registeruser" }],
     });
-    
+
     if (!data) {
       return res.status(400).send({ message: "user not found" });
     }
-    const updateStatus =await db.registeruser.update(
-     {status : "success"},
-     {where : {id : data.registeruser.id}}
-    )
+    await db.registeruser.update(
+      { status: "success" },
+      { where: { id: data.registeruser.id } }
+    );
     return res.status(200).send({
       message: "user successful retrive",
-      data
+      data,
     });
   } catch (error) {
     console.error(error, "error");
@@ -253,17 +253,15 @@ const getAllValue = async (req, res) => {
   }
 };
 
-const assingmentSubmition = async(req, res)=>{
+const assingmentSubmition = async (req, res) => {
   try {
-    const result = await assingmentSubmitionServices(req)
-    if(result){
-      res.status(400).send({message:"No assingment form"});
+    const result = await assingmentSubmitionServices(req);
+    if (!result) {
+      res.status(400).send({ message: "No assingment form" });
     }
-    res.status(400).send({message:"data fetch successfully", data:result});
-  } catch (error) {
-    
-  }
-}
+    res.status(400).send({ message: "data fetch successfully", data: result });
+  } catch (error) {}
+};
 module.exports = {
   registerUser,
   allregisteruser,
@@ -278,5 +276,5 @@ module.exports = {
   stampDataById,
   getAllValue,
   getStampbyId,
-  assingmentSubmition
+  assingmentSubmition,
 };

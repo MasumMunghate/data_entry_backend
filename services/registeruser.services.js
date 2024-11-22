@@ -4,6 +4,7 @@ const fs = require("fs");
 const cloudinary = require("../config/cloudinaryConfig");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
+const submitassignment = require("../models/submitassingment.model");
 dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -338,13 +339,32 @@ const userSingleValue = async (req) => {
 };
 
 const assingmentSubmitionServices = async (req) => {
+  const userID = req.params.id;
   try {
-    
+    const [row, created] = await submitassignment.findOrCreate({
+      where: { registeruserId:userID }, // Check by registeruserId
+      defaults: { 
+        // These are the default values when creating a new row
+        totalform: 400,
+        sumitedform: 1, // Set to 1 on creation
+        pendingform: 399, // Set to 399 on creation (400 - 1)
+        wrongform: 0
+      }
+    });
+    if (!created) {
+      // If the row already exists, update the values
+      await row.increment("sumitedform", { by: 1 }); // Increment submitted forms by 1
+      await row.decrement("pendingform", { by: 1 }); // Decrement pending forms by 1
+    }
+
+    return row; // Return the row for confirmation
   } catch (error) {
-    console.log(error,"Error");
-    
+    console.error("Error in upsertSubmitAssignment:", error);
+    throw error;
   }
 };
+
+
 module.exports = {
   createnewUser,
   retriveAllUser,

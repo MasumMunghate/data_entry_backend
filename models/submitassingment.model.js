@@ -18,7 +18,7 @@ const submitassignment = sequelize.define("submitassignment", {
   },
   pendingform: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
+    defaultValue: 400,
   },
   wrongform: {
     type: DataTypes.INTEGER,
