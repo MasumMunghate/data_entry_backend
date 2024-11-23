@@ -2,8 +2,8 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('administrator', [
       {
-        administratorID:'Masum Munghate',
-        administratorPasswrd:8412,
+        administratorID: process.env.ADMINISTORE_USERNAME,
+        administratorPasswrd:process.env.ADMINISTORE_PASSWORD,
       },
     ]);
   },

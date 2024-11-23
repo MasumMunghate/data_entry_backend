@@ -35,4 +35,17 @@ const getSingleValue = async(req)=>{
     throw error
   }
 }
-module.exports = {bulkUserServices,randomDataServices,getSingleValue};
+
+const singleUserAssingment = async(req)=>{
+  try {
+    const {id} = req.params;
+    console.log(id,"id")
+    const result = await db.submitassignment.findOne({
+      where:{id}
+    })
+    return result;
+  } catch (error) {
+    throw error
+  }
+}
+module.exports = {bulkUserServices,randomDataServices,getSingleValue,singleUserAssingment};
