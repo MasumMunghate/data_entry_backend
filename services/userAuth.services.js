@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const db = require('../models')
 dotenv.config();
 
 function generetToken(payload) {
@@ -20,7 +21,6 @@ const authUser = async (req) => {
     if (!findEmail || !(await bcrypt.compare(password, findEmail.password))) {
       throw new Error("Incorrect email or password");
     }
-
     const token = generetToken({ id: findEmail.id });
     return token;
   } catch (error) {

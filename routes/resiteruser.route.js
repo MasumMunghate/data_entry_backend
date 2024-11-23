@@ -1,5 +1,5 @@
 
-const {registerUser, allregisteruser, stampInfomation, singleUserById, getUserWithPosts, createUserWithPosts, getAllUser, deleteuser, editregisterUser, secondEmailSend, userPaggination, stampData, stampDataById, getAllValue,getStampbyId} = require('../controllers/registeruser.controller');
+const {registerUser, allregisteruser, stampInfomation, singleUserById, getUserWithPosts, createUserWithPosts, getAllUser, deleteuser, editregisterUser, secondEmailSend, userPaggination, stampData, stampDataById, getAllValue,getStampbyId,userdetailsWithAssingment} = require('../controllers/registeruser.controller');
 const validate = require('../Middlewares/validate.middleware');
 const registerUserValidate = require('../validation/registeruser.validate');
 const multerUploads = require('../Middlewares/multer.middleware');
@@ -18,10 +18,11 @@ router.get('/registeruser/:id', singleUserById);
 
 router.delete('/deleteuser/:id' , deleteuser)
 router.put('/edituser/:id', editregisterUser)
-router.post('/sendemail/:id', secondEmailSend)
+router.get('/sendemail/:id', secondEmailSend)
 router.get('/getalluser' , userPaggination)
 router.get('/stampdata', stampData)
 router.get('/stampdata/:id', stampDataById)
 router.get('/getallvalue', getAllValue) // return single value
 // router.delete('/getelestamp', deleteStamp)
+router.get('/userdetailswithassingment', userdetailsWithAssingment)
 module.exports= router;

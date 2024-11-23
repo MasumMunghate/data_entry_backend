@@ -50,20 +50,20 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-registeruser.hasOne(stampInfo, { foreignKey: "userid" });
-stampInfo.belongsTo(registeruser, { foreignKey: "userid" });
+registeruser.hasOne(stampInfo, { foreignKey: "userid",as: "stampDetails", });
+stampInfo.belongsTo(registeruser, { foreignKey: "userid",as: "stampDetails", });
 
-registeruser.hasOne(submitassignment,{foreignKey:"registeruserId"});
-submitassignment.belongsTo(registeruser,{foreignKey:"registeruserId"});
+registeruser.hasOne(submitassignment,{foreignKey:"registeruserId",as: "submitData",});
+submitassignment.belongsTo(registeruser,{foreignKey:"registeruserId",as: "submitData",});
 
 
-user.hasMany(post, {
-  foreignKey: "userId",
-  as: "posts",
-});
-post.belongsTo(user, {
-  foreignKey: "userId",
-  as: "user",
-});
+// user.hasMany(post, {
+//   foreignKey: "userId",
+//   as: "posts",
+// });
+// post.belongsTo(user, {
+//   foreignKey: "userId",
+//   as: "user",
+// });
 
 module.exports = db;

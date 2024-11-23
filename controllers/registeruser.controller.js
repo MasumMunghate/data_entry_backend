@@ -10,6 +10,7 @@ const {
   getStampDataById,
   userSingleValue,
   assingmentSubmitionServices,
+  userdetailsWithAssingmentServices
 } = require("../services/registeruser.services");
 const db = require("../models");
 
@@ -119,23 +120,21 @@ function generatePassword() {
 }
 const getStampbyId = async (req, res) => {
   try {
-    const stamp_id = req.query.id;
-    const data = await db.stampInfo.findOne({
-      where: { id: stamp_id },
-      include: [{ model: registeruser, as: "registeruser" }],
-    });
-
-    if (!data) {
-      return res.status(400).send({ message: "user not found" });
+    const { id } = req.params;
+    const user = await db.registeruser.findOne({
+      where:{id},
+      include:[
+        {
+          model: stampInfo,
+          as: "stampDetails",
+        }
+      ]
+    })
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-    await db.registeruser.update(
-      { status: "success" },
-      { where: { id: data.registeruser.id } }
-    );
-    return res.status(200).send({
-      message: "user successful retrive",
-      data,
-    });
+
+    res.status(200).json(user);
   } catch (error) {
     console.error(error, "error");
     return res
@@ -199,7 +198,7 @@ const secondEmailSend = async (req, res) => {
     const email = await sendEmail(req);
     return res.status(200).send({ message: "Email send successfully", email });
   } catch (error) {
-    res.status(500).send({ message: "Internal server error" });
+    res.status(500).send({ message: "Internal server error",email});
     console.error("Error", error);
   }
 };
@@ -262,6 +261,18 @@ const assingmentSubmition = async (req, res) => {
     res.status(400).send({ message: "data fetch successfully", data: result });
   } catch (error) {}
 };
+
+const userdetailsWithAssingment = async(req, res)=>{
+  try {
+    const user = await userdetailsWithAssingmentServices(req);
+    if(!user){
+     return res.status(400).send({message:"user details not found"})
+    }
+    return res.status(200).send({message:"data retrive successfully",user})
+  } catch (error) {
+    console.log(error,"Error");
+  }
+}
 module.exports = {
   registerUser,
   allregisteruser,
@@ -277,4 +288,5 @@ module.exports = {
   getAllValue,
   getStampbyId,
   assingmentSubmition,
+  userdetailsWithAssingment
 };

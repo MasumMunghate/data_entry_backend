@@ -198,13 +198,17 @@ const sendEmail = async (req) => {
       where: { id: userId },
       attributes: ["email"],
     });
-    await db.registeruser.update({
-      where: { status: "success" },
-    });
+    if (!useremail) {
+      throw new Error("User not found");
+    }
+    await db.registeruser.update(
+      { status: "success" },
+      { where: { id: userId } }
+    );
     const dbEmail = useremail ? useremail.email : null;
     mailOption.to = dbEmail;
     const userpassword = generatePassword();
-    const hashedPassword = await bcrypt(userpassword, 10);
+    const hashedPassword = await bcrypt.hash(userpassword, 10);
     const newPassword = await db.registeruser.update(
       { password: hashedPassword },
       { where: { id: userId } }
@@ -342,28 +346,41 @@ const assingmentSubmitionServices = async (req) => {
   const userID = req.params.id;
   try {
     const [row, created] = await submitassignment.findOrCreate({
-      where: { registeruserId:userID }, // Check by registeruserId
-      defaults: { 
-        // These are the default values when creating a new row
+      where: { registeruserId: userID },
+      defaults: {
         totalform: 400,
-        sumitedform: 1, // Set to 1 on creation
-        pendingform: 399, // Set to 399 on creation (400 - 1)
-        wrongform: 0
-      }
+        sumitedform: 1,
+        pendingform: 399,
+        wrongform: 0,
+      },
     });
     if (!created) {
-      // If the row already exists, update the values
-      await row.increment("sumitedform", { by: 1 }); // Increment submitted forms by 1
-      await row.decrement("pendingform", { by: 1 }); // Decrement pending forms by 1
+      await row.increment("sumitedform", { by: 1 });
+      await row.decrement("pendingform", { by: 1 });
     }
-
-    return row; // Return the row for confirmation
+    return row;
   } catch (error) {
     console.error("Error in upsertSubmitAssignment:", error);
     throw error;
   }
 };
 
+const userdetailsWithAssingmentServices = async (req) => {
+  try {
+    const user = await db.registeruser.findAll({
+      // where:{id},
+      include: [
+        {
+          model: submitassignment,
+          as: "submitData",
+        },
+      ],
+    });
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
   createnewUser,
@@ -376,5 +393,6 @@ module.exports = {
   allStampData,
   getStampDataById,
   userSingleValue,
-  assingmentSubmitionServices
+  assingmentSubmitionServices,
+  userdetailsWithAssingmentServices,
 };
