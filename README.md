@@ -83,7 +83,7 @@ This project serves as a **freelancing platform** where users complete short-ter
 - JWT_SECRET=your_secret_key  
 - CLOUDINARY_URL=your_cloudinary_url  
 4. Run the database migrations:
- -npx sequelize-cli db:migrate  
+- npx sequelize-cli db:migrate  
 5. Start the server:
 - npm start  
 
