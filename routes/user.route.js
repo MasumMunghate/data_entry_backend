@@ -7,8 +7,8 @@ const router = require('express').Router();
 
 router.post('/addbulkuser', addBulkUser); // done
 router.get('/getsingledata/:userId',getSingleData); // done
-router.get('/singlevalue',dataIntoSingleValue);
-router.get('/userdetailswithassingmentsubmition/:id' , assingmentSubmition)
-router.get('/individualuserassingment/:id', individualUserAssingment)
+router.get('/singlevalue',dataIntoSingleValue); //done
+router.get('/userdetailswithassingmentsubmition/:id' , assingmentSubmition) //done
+router.get('/individualuserassingment/:id', individualUserAssingment) //done
 
 module.exports = router;

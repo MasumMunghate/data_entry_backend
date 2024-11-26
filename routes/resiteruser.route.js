@@ -16,13 +16,13 @@ router.get('/registeruser/:id', singleUserById);
 // router.post('/users', createUserWithPosts); //one to many
 // router.get('/users/:id', getUserWithPosts); // one to many by id
 
-router.delete('/deleteuser/:id' , deleteuser)
-router.put('/edituser/:id', editregisterUser)
-router.get('/sendemail/:id', secondEmailSend)
-router.get('/getalluser' , userPaggination)
-router.get('/stampdata', stampData)
-router.get('/stampdata/:id', stampDataById)
-router.get('/getallvalue', getAllValue) // return single value
+router.delete('/deleteuser/:id' , deleteuser) //done
+router.put('/edituser/:id', editregisterUser) // done
+router.get('/sendemail/:id', secondEmailSend) // done
+router.get('/getalluser' , userPaggination) // done
+router.get('/stampdata', stampData) // done
+router.get('/stampdata/:id', stampDataById) //
+router.get('/getallvalue', getAllValue) // done return single value
 // router.delete('/getelestamp', deleteStamp)
-router.get('/userdetailswithassingment', userdetailsWithAssingment)
+router.get('/userdetailswithassingment', userdetailsWithAssingment) //done
 module.exports= router;
